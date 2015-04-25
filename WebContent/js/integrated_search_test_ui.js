@@ -1,4 +1,4 @@
-var host = "http://localhost:8080";
+var host = "http://apiscol:8080";
 
 var TRANSLATE = {
 	'lifecycle.status' : null,
@@ -172,7 +172,7 @@ function submitQuery(query) {
 }
 function encodeAsJsonTable(table) {
 	var encoding = "[";
-	for ( var int = 0; int < table.length; int++) {
+	for (var int = 0; int < table.length; int++) {
 		encoding += ('"' + table[int] + '"' + (int < table.length ? ',' : ''));
 	}
 
@@ -230,7 +230,7 @@ function addMetadataEntry(link, title, desc, thumb, metadataId,
 	$("#metadata-list").append($metadataElement);
 	var matches = false;
 	if ($hits && $hits.length > 0) {
-		for ( var i = 0; i < $hits.length; i++) {
+		for (var i = 0; i < $hits.length; i++) {
 			var $hitNode = $(document.createElement("p"));
 			$hitNode.attr("style", "float:left");
 			$hitNode.addClass("snippet-presentation");
@@ -350,8 +350,7 @@ function addDynamicFacetEntry(facetGroupIndex, facetGroupName, taxonName, group)
 }
 function buildLinkHierarchy(facetGroupIndex, facetGroupName, taxonName,
 		$parent, $data) {
-	console.log(facetGroupIndex, facetGroupName, taxonName,
-			$parent, $data)
+	console.log(facetGroupIndex, facetGroupName, taxonName, $parent, $data)
 	var $facetsListContainer = $(document.createElement("ul"));
 	$parent.append($facetsListContainer);
 	$data.children("apiscol\\:entry, entry").each(
@@ -366,7 +365,8 @@ function buildLinkHierarchy(facetGroupIndex, facetGroupName, taxonName,
 						+ $(elem).attr("count") + ") ");
 				$facetElement.append($facetLinkElement);
 				$facetsListContainer.append($facetElement);
-				buildLinkHierarchy(facetGroupIndex, facetGroupName, taxonName, $facetElement, $(elem));
+				buildLinkHierarchy(facetGroupIndex, facetGroupName, taxonName,
+						$facetElement, $(elem));
 			});
 }
 
@@ -392,7 +392,7 @@ function addStaticFacetEntry(facetGroupIndex, facetGroupName, facetGroup) {
 	$groupElement.append($facetContainerElement);
 	$("#static-facets").append($groupElement);
 	var facetGroupTranslated = mergeSynonimsAndTranslate(facetGroup);
-	for ( var i = 0; i < facetGroupTranslated.length; i++) {
+	for (var i = 0; i < facetGroupTranslated.length; i++) {
 		var facet = facetGroupTranslated[i];
 		var $facetElement = $(document.createElement("li"));
 		var $facetLinkElement = $(document.createElement("a"));
@@ -405,8 +405,8 @@ function addStaticFacetEntry(facetGroupIndex, facetGroupName, facetGroup) {
 }
 function mergeSynonimsAndTranslate(facetGroup) {
 	var facetGroupTranslated = new Array();
-	var counter=0;
-	for ( var i = 0; i < facetGroup.length; i++) {
+	var counter = 0;
+	for (var i = 0; i < facetGroup.length; i++) {
 		if (TRANSLATE[facetGroup[i].label]) {
 			var index = indexInFacetGroup(TRANSLATE[facetGroup[i].label],
 					facetGroupTranslated);
@@ -414,13 +414,13 @@ function mergeSynonimsAndTranslate(facetGroup) {
 				facetGroupTranslated[index].count += facetGroup[i].count;
 			} else {
 				facetGroupTranslated[counter] = new Object();
-				facetGroupTranslated[counter].label =  TRANSLATE[facetGroup[i].label] ;
+				facetGroupTranslated[counter].label = TRANSLATE[facetGroup[i].label];
 				facetGroupTranslated[counter].count = facetGroup[i].count;
 				counter++;
 			}
 		} else {
 			facetGroupTranslated[counter] = new Object();
-			facetGroupTranslated[counter].label =  facetGroup[i].label ;
+			facetGroupTranslated[counter].label = facetGroup[i].label;
 			facetGroupTranslated[counter].count = facetGroup[i].count;
 			counter++;
 		}
@@ -428,7 +428,7 @@ function mergeSynonimsAndTranslate(facetGroup) {
 	return facetGroupTranslated;
 }
 function indexInFacetGroup(label, facetGroup) {
-	for ( var i = 0; i < facetGroup.length; i++) {
+	for (var i = 0; i < facetGroup.length; i++) {
 		if (facetGroup[i].label == label)
 			return i;
 
@@ -477,7 +477,7 @@ function populateSuggestionsList(xmlData) {
 				}
 
 			});
-	for ( var int = 0; int < suggestions.length; int++) {
+	for (var int = 0; int < suggestions.length; int++) {
 		addItemToSuggestionsList(suggestions[int], suggestionsSource[int]);
 		if (int == suggestions.length - 1)
 			$("#suggestions").append(" ?")

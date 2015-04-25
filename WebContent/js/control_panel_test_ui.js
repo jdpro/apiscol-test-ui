@@ -1,5 +1,5 @@
-var readHost = "http://localhost:8080";
-var host = "https://localhost:8443";
+var readHost = "http://apiscol:8080";
+var host = "https://apiscol:8080";
 var editUrl = host + "/edit";
 var metaMaintenanceUrl = editUrl + "/maintenance/meta";
 var transferUrl = editUrl + "/transfer";
@@ -51,14 +51,9 @@ function initialize() {
 		$(".container").hide();
 		waitForAuthentication();
 	}
-	if (nonce) {
 		showIdentificationFields(false);
 		$(".container").show();
 
-	} else {
-		showIdentificationFields(true);
-		return;
-	}
 	if (pageIsBuilt)
 		return;
 	pageIsBuilt = true;
@@ -205,8 +200,6 @@ function handleFileUpload() {
 									type : 'POST',
 									headers : {
 										accept : "application/atom+xml",
-										"If-Match" : etag,
-										authorization : nonce
 									},
 									xhr : function() {
 										myXhr = $.ajaxSettings.xhr();
@@ -227,7 +220,6 @@ function handleFileUpload() {
 									},
 									error : function(jqXHR, textStatus,
 											errorThrown) {
-										nonce = extractAuthenticationHeader(response);
 										switch (jqXHR.status) {
 										case 403:
 											showIdentificationFields(true);
@@ -401,7 +393,7 @@ function populateSuggestionsList(xmlData) {
 		if ($.inArray(suggestion, suggestions) == -1)
 			suggestions.push(suggestion);
 	});
-	for ( var int = 0; int < suggestions.length; int++) {
+	for (var int = 0; int < suggestions.length; int++) {
 		addItemToSuggestionsList(suggestions[int]);
 		if (int == suggestions.length - 1)
 			$("#suggestions", $("#resources-container")).append(" ?")
@@ -495,7 +487,7 @@ function populateResourcesList(xmlData) {
 function getResourceListItemByResourceId(resid) {
 	var items = $("#resources_list", $("#resources-container")).find("li");
 	var textItem;
-	for ( var i = 0; i < items.length; i++) {
+	for (var i = 0; i < items.length; i++) {
 		textItem = $(items[i]).attr("data-resid");
 		if (textItem == resid)
 			return $(items[i]);
@@ -573,7 +565,7 @@ function addItemToResourcesList(resId, metaId, type, version, atomLink,
 
 	if ($hits && $hits.length > 0) {
 
-		for ( var i = 0; i < $hits.length; i++) {
+		for (var i = 0; i < $hits.length; i++) {
 			var $hitNode = $(document.createElement("p"));
 			$hitNode.addClass("snippet-presentation");
 			var $hit = $($hits[i]);
@@ -1597,7 +1589,7 @@ function submitMetadataSearchQuery(query) {
 }
 function encodeAsJsonTable(table) {
 	var encoding = "[";
-	for ( var int = 0; int < table.length; int++) {
+	for (var int = 0; int < table.length; int++) {
 		encoding += ('"' + table[int] + '"' + (int < table.length ? ',' : ''));
 	}
 
@@ -1675,7 +1667,7 @@ function populateFacetsList(xmlData) {
 }
 function buildHierarchically(index, elem, hierarchicalIndex, intermediateIndex) {
 	var ancesterFound = false;
-	for ( var int = index.length - 1; int >= 0; int--) {
+	for (var int = index.length - 1; int >= 0; int--) {
 		var ancester = index[int];
 		if (elem.indexOf(ancester) == 0) {
 			index.splice(int, 1);
@@ -1762,7 +1754,7 @@ function addStaticFacetEntry(facetGroupName, facetGroup) {
 	var $facetContainerElement = $(document.createElement("ul"));
 	$groupElement.append($facetContainerElement);
 	$("#static-facets", $("#metadata-container")).append($groupElement);
-	for ( var i = 0; i < facetGroup.length; i++) {
+	for (var i = 0; i < facetGroup.length; i++) {
 		var facet = facetGroup[i];
 		var $facetElement = $(document.createElement("li"));
 		var $facetLinkElement = $(document.createElement("a"));
@@ -1829,7 +1821,7 @@ function addMetadataEntry(title, desc, metadataId, metadataVersion, restLink,
 
 	if ($hits && $hits.length > 0) {
 
-		for ( var i = 0; i < $hits.length; i++) {
+		for (var i = 0; i < $hits.length; i++) {
 			var $hitNode = $(document.createElement("p"));
 			$hitNode.addClass("snippet-presentation");
 			var $hit = $($hits[i]);
@@ -1978,7 +1970,7 @@ function _populateSuggestionsList(xmlData) {
 		if ($.inArray(suggestion, suggestions) == -1)
 			suggestions.push(suggestion);
 	});
-	for ( var int = 0; int < suggestions.length; int++) {
+	for (var int = 0; int < suggestions.length; int++) {
 		_addItemToSuggestionsList(suggestions[int]);
 		if (int == suggestions.length - 1)
 			$("#suggestions", $("#metadata-container")).append(" ?")
@@ -2018,14 +2010,12 @@ function _handleOptimizeButtonClick(mdid, type) {
 			authorization : nonce
 		},
 		error : function(msg) {
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			prettyAlert("Erreur", "Echec de la requête d'optimisation :" + msg,
 					"error");
 		},
 		success : function() {
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			prettyAlert("Succès", "La requête d'optimisation a réussi");
 		}
 	});
@@ -2039,16 +2029,14 @@ function _handleDeleteAllButtonClick(mdid, type) {
 			authorization : nonce
 		},
 		error : function(msg) {
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			prettyAlert("Erreur", "Echec de la requête de vidage  :" + msg,
 					"error");
 			_triggerRequest();
 		},
 		success : function() {
 			prettyAlert("Succès", "La requête de vidage a réussi");
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			_triggerRequest();
 		}
 	});
@@ -2062,16 +2050,14 @@ function _handleRecoveryButtonClick(mdid, type) {
 			authorization : nonce
 		},
 		error : function(msg) {
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			prettyAlert("Erreur", "Echec de la requête de restauration  :"
 					+ msg, "error");
 			_triggerRequest();
 		},
 		success : function() {
 			prettyAlert("Succès", "La requête de restauration a réussi");
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			_triggerRequest();
 		}
 	});
@@ -2248,16 +2234,14 @@ function handleThumbsSuggestionSelection(event) {
 			authorization : nonce
 		},
 		error : function(msg) {
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			if (msg.status == 403)
 				showIdentificationFields(true);
 			prettyAlert("Pb d'autorisation", msg.responseText, "error")
 		},
 		success : function(result) {
 			waitForThumbs(false);
-			nonce = extractAuthenticationHeader(response);
-			;
+
 			thumbEtag = $(result).find("thumbs").attr("version");
 			defaultIcon = $(result).find("thumbs").find(
 					"thumb[status='default']").text();
@@ -2488,12 +2472,12 @@ function populateManifestsList(xmlData) {
 						"id").text(), $(elem).children("updated").text(), $(
 						elem).find("link[type='text/html']").attr("href"), $(
 						elem).find("link[type='application/lom+xml']").attr(
-						"href"), $(
-								elem).find("link[type='application/lom+xml']").attr(
-								"href"));
+						"href"), $(elem).find(
+						"link[type='application/lom+xml']").attr("href"));
 			});
 }
-function addManifestsEntry(title, manifestId, manifestVersion, restLink, metadataLink) {
+function addManifestsEntry(title, manifestId, manifestVersion, restLink,
+		metadataLink) {
 	restLink = restLink.replace(host, readHost);
 	var $manifestElement = $(document.createElement("li"));
 	var $titleElement = $(document.createElement("h4"));

@@ -282,10 +282,8 @@ function scanForFileTransferReports() {
 		},
 		error : function(msg) {
 			nonce = extractAuthenticationHeader(response);
-			;
-			if (msg.status == 403)
-				showIdentificationFields(true);
-			prettyAlert("Pb authorisation", msg.responseText, "error")
+			
+			prettyAlert("Erreur", msg.responseText, "error")
 		},
 		success : function(result) {
 			nonce = extractAuthenticationHeader(response);
@@ -617,10 +615,6 @@ function handleResourceDeleteButtonClick(event) {
 			nonce = extractAuthenticationHeader(response);
 			;
 			switch (jqXHR.status) {
-			case 403:
-				showIdentificationFields(true);
-				prettyAlert("Pb autorisation", msg.responseText, "error");
-				break;
 			default:
 				prettyAlert(
 						"Une erreur a empêché la suppression de la ressource.",
@@ -824,9 +818,6 @@ function handleFileDeleteButtonClick(event) {
 					nonce = extractAuthenticationHeader(response);
 					;
 					switch (jqXHR.status) {
-					case 403:
-						showIdentificationFields(true);
-						break;
 					case 410:
 						alert("Le fichier n'existe plus dans Apiscol, impossible de le supprimer.");
 						uiblocked = false;
@@ -880,9 +871,6 @@ function sendPutRequest(resourceId, data) {
 			nonce = extractAuthenticationHeader(response);
 			;
 			switch (jqXHR.status) {
-			case 403:
-				showIdentificationFields(true);
-				break;
 			case 422:
 				alert("Impossible d'effectuer cette opération :" + textStatus);
 				uiblocked = false;
@@ -933,9 +921,6 @@ function requestVoidResourceCreation(mdid, type) {
 		error : function(msg) {
 			prettyAlert("Erreur", msg.responseText, "error");
 			nonce = extractAuthenticationHeader(response);
-			;
-			if (msg.status == 403)
-				showIdentificationFields(true);
 		},
 		success : function(data) {
 			wait(false);
@@ -960,8 +945,6 @@ function handleOptimizeButtonClick() {
 			;
 			prettyAlert("Erreur", "Echec de la requête d'optimisation :" + msg,
 					"error");
-			if (msg.status == 403)
-				showIdentificationFields(true);
 		},
 		success : function() {
 			wait(false);
@@ -984,8 +967,6 @@ function handleDeleteAllButtonClick(mdid, type) {
 			;
 			prettyAlert("Erreur", "Echec de la requête de vidage  :" + msg,
 					"error");
-			if (msg.status == 403)
-				showIdentificationFields(true);
 			triggerRequest();
 		},
 		success : function() {
@@ -1009,8 +990,6 @@ function handleRecoveryButtonClick(mdid, type) {
 			;
 			prettyAlert("Erreur", "Echec de la requête de restauration  :"
 					+ msg, "error");
-			if (msg.status == 403)
-				showIdentificationFields(true);
 			triggerRequest();
 		},
 		success : function() {
@@ -1323,10 +1302,7 @@ function waitForAuthentication() {
 			});
 	waitingForAuthentication = true;
 }
-function showIdentificationFields(bool) {
-	$("body>div.auth").toggle(bool);
-	$("body>div:not(.auth)").toggle(!bool);
-}
+
 
 var index = {
 	"rights.copyrightandotherrestrictions" : "droits",
